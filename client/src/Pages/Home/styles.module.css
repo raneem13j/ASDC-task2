@@ -1,0 +1,36 @@
+.container {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgb(231, 231, 231) ;
+}
+.h1{
+   color: #2c6487;
+}
+.formContainer {
+  width: 400px;
+  margin: 0 auto 0 auto;
+  padding: 32px;
+  background: white;
+  border: #feba1b solid 6px;
+  border-radius: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+.input {
+  width: 100%;
+  padding: 12px;
+  outline: none;
+	border: none;
+	color: rgb(77, 77, 77);
+	background-color: rgb(240, 240, 240);
+	border-radius: 20px;
+  font-size: 0.9rem;
+}
+.input option {
+  margin-top: 20px;
+}
