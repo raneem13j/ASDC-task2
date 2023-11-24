@@ -50,7 +50,7 @@ function Login() {
       alert("You have registered successfully");
 
 
-      window.location.href = "/Home";
+      window.location.href = "/messenger";
      
       console.log("Registration successful");
     } catch (error) {
@@ -85,7 +85,7 @@ function Login() {
        const decodedToken = jwtDecode(data.token);
       // console.log(decodedToken);
       alert("You have loged in successfully");
-      window.location.href = "/Home";
+      window.location.href = "/messenger";
       // alert("You have loged in successfully");
       console.log("Login successful");
     } catch (error) {

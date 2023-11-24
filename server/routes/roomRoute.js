@@ -6,6 +6,7 @@ import {
   getAllRooms,
   getRoomById,
   getUsersInRoom,
+  getRoomsByUserId,
   createRoom,
   joinRoom
 
@@ -15,6 +16,7 @@ import {
 router.get('/', getAllRooms);
 router.get('/:id', getRoomById);
 router.get('/roomUsers/:id', getUsersInRoom);
+router.get('/userRooms/:userId', getRoomsByUserId);
 router.put('/:id', joinRoom);
 router.post('/:id', createRoom);
 

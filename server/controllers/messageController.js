@@ -14,7 +14,7 @@ const __dirname = dirname(__filename);
 
 export const sendMessage = async (req, res) => {
   try {
-    let fileDetails = {}; // Add this line to store file details
+    let fileDetails = {}; 
 
     if (req.file) {
       cloudinary.config({
@@ -34,7 +34,7 @@ export const sendMessage = async (req, res) => {
       roomId: req.body.roomId,
       senderId: req.body.senderId,
       text: req.body.text,
-      file: fileDetails, // Assign file details here
+      file: fileDetails,
     });
 
     const savedMessage = await newMessage.save();

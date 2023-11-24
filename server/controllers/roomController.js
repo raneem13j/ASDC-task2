@@ -98,3 +98,20 @@ export const createRoom = async (req, res) => {
     }
   }; 
 
+  export const getRoomsByUserId = async (req, res) => {
+    const userId = req.params.userId;
+  
+    try {
+      // Find rooms where the userId array contains the specified user ID
+      const rooms = await Room.find({ userId: userId });
+  
+      if (!rooms || rooms.length === 0) {
+        return res.status(404).json({ message: "No rooms found for the user" });
+      }
+  
+      res.status(200).json(rooms);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  };

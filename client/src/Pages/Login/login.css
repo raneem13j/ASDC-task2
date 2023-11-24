@@ -1,3 +1,14 @@
+@import url(
+"https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: "Poppins", sans-serif;
+	
+}
+
 .login-body {
 	
 	height: 100vh;
@@ -15,11 +26,11 @@
 .login-container {
 	height: 600px;
 	width: 500px;
-	background-color: white ;
+	background-color: white !important ;
 	box-shadow: 6px 6px 15px rgb(128, 128, 128);
 	position: relative;
 	overflow: hidden;
-	border: #feba1b solid 6px;
+	border: teal solid 6px;
 	border-radius: 50px;
 }
 
@@ -50,7 +61,14 @@
 	height: 60px;
 	width: 150px;
 	border-radius: 50px;
-	border:#f4b31a solid 3px;
+	/* background-image: linear-gradient(to right,
+    
+    #6794ad   ,
+	#2c6487  );
+     */
+
+	 
+	 border:teal solid 3px;
 	position: absolute;
 	top: 20px;
 	left:95px;
@@ -112,9 +130,13 @@
 	width: 150px;
 	border-radius: 50px;
 	background-color: transparent;
+	/* background-image: linear-gradient(to right,
+    #6794ad  ,
+    
+	#2c6487   ); */
 	font-size: 22px;
 	color:#2c6487;
-	 border:#f4b31a solid 2px;
+	 border: teal solid 2px;
 }
 .login-clkbtn:hover{
 

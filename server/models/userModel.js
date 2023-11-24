@@ -17,12 +17,6 @@ const userSchema = new Schema(
       minlength: 6,
       required: true,
     },
-    roomId: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Room",
-      },
-    ],
   },
   { timestamps: true },
   );
