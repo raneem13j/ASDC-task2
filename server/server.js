@@ -5,16 +5,13 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
 import cors from "cors";
-import http from "http";
 import userRoute from "./routes/userRoute.js";
 import { userAuth } from "./middlewares/auth.js";
 
 dotenv.config();
-
 await connectDB();
 
 const PORT = process.env.PORT || 5000;
-const PORT2 = process.env.PORT || 3000;
 const app = new express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -27,7 +24,7 @@ if (process.env.NODE_ENV === "development") {
 app.use(cookieParser());
 app.use(express.json());
 app.use(cors());
-const server = http.createServer(app);
+
 
 //routes gose here
 app.use("/user", userRoute);
