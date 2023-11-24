@@ -6,6 +6,8 @@ import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
 import cors from "cors";
 import userRoute from "./routes/userRoute.js";
+import roomRoute from "./routes/roomRoute.js";
+import messageRoute from "./routes/messageRoute.js";
 import { userAuth } from "./middlewares/auth.js";
 
 dotenv.config();
@@ -28,6 +30,8 @@ app.use(cors());
 
 //routes gose here
 app.use("/user", userRoute);
+app.use("/room", roomRoute);
+app.use("/message", messageRoute);
 
 //authintication to
 app.get("/basic", userAuth, (req, res) => res.send("User Route"));
