@@ -1,5 +1,6 @@
 import express from "express";
 const router = express.Router();
+import upload from '../middlewares/multer.js';
 
 
 import {
@@ -9,7 +10,7 @@ import {
 
 
 router.get('/:roomId', getMessageByRoomId);
-router.post('/', sendMessage);
+router.post('/',upload.single("file"), sendMessage);
 
 
 

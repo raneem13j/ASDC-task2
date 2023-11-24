@@ -15,7 +15,16 @@ const messageSchema = new Schema(
     },
     text: {
       type: String,
-      required: true,
+    },
+    file:{
+      public_id:{
+         type: String,
+         //required: true,
+      },
+      url:{
+         type: String,
+         //required: true,
+      }
     },
   },
   { timestamps: true }
