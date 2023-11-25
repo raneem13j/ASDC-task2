@@ -7,16 +7,17 @@ function Conversation(room) {
   const currentId = sessionStorage.getItem("Id");
   const isCurrentUserInRoom = room.room.userId.includes(currentId);
   const [join, setJoin] = useState("");
-
-
+ 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const message = {
+    const data = {
       userId: currentId,
     };
     try {
-      const res = await axios.put(`http://localhost:5000/room/${room.room._id}`);
-      setJoin([res.data]);
+      const res = await axios.put(`http://localhost:5000/room/${room.room._id}`, data);
+      setJoin(res.data);
+      window.location.reload(true);
     } catch (err) {
       console.log(err);
     }

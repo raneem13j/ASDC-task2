@@ -14,6 +14,8 @@ function Messenger() {
   const [newMessage, setNewMessage] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const scrollRef = useRef();
+  const [addMode, setAddMode] = useState(false);
+  const [newRoom, setNewRoom] = useState("");
 
   useEffect(() => {
     const getConversations = async () => {
@@ -77,6 +79,28 @@ function Messenger() {
     }
   };
 
+  const handleOpenForm = () => {
+    setAddMode(true);
+  };
+
+  const handleAdd = async (e) => {
+    e.preventDefault();
+  
+    const data = {
+      roomName: newRoom,
+    };
+  
+    try {
+      const res = await axios.post(`http://localhost:5000/room/${userId}`, data);
+  
+      setRooms([...rooms, res.data]);
+      setNewRoom("");
+      setAddMode(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -86,7 +110,23 @@ function Messenger() {
       <div className="messenger">
         <div className="chatMenu">
           <div className="chatMenuWrapper">
-            <button className="chatSubmitButton1">Add Room</button>
+            <button className="chatSubmitButton1" onClick={handleOpenForm}>Add Room</button>
+            {addMode && (
+                <form >
+                  <input
+                    className="chatMessageInput1"
+                    type="text"
+                    placeholder="Class Name"
+                    name="levelName"
+                    onChange={(e) => setNewRoom(e.target.value)}
+                    value={newRoom}
+                  ></input>
+                  <button type="submit"className="chatSubmitButton2" onClick={handleAdd}>
+                    SAVE
+                  </button>
+                
+                </form>
+              )}
             {rooms.map((r) => (
               <div onClick={() => setCurrentChat(r)}>
                 <Conversation room={r} />
