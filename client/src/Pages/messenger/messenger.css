@@ -5,7 +5,7 @@
   }
   
   .chatMenu {
-    flex: 3.5;
+    flex: 3.2;
   }
   
   .chatMenuInput {
@@ -37,19 +37,6 @@
     display: grid;
     grid-template-columns: 4fr 1fr;
   }
-
-
-
-
- .chatSubmitButton1{
-    width: 80px;
-    height: 40px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: teal;
-    color: white;
- }
   
   .chatMessageInput {
     width: 80%;
@@ -73,6 +60,17 @@
     color: white;
     
   }
+
+ .chatSubmitButton1{
+  width: 80px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: teal;
+  color: white;
+}
+
   .chatSubmitButton2 {
     width: 40px;
     height: 30px;
@@ -81,6 +79,18 @@
     cursor: pointer;
     background-color: teal;
     color: white;
+    
+  }
+
+  .chatSubmitButton4{
+    width: 80px;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: teal;
+    color: white;
+    margin-top: 20px;
     
   }
   
@@ -99,8 +109,12 @@
     position: absolute;
     top: 5%;
     font-size: 40px;
-    color: rgb(176, 165, 165);
+    color: teal;
     cursor: default;
+   
+  }
+  h2{
+    color:teal
   }
   
   @media screen and (max-width: 768px) {

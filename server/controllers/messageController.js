@@ -23,10 +23,17 @@ export const sendMessage = async (req, res) => {
         api_secret: process.env.CLOUDINARY_API_SECRET,
       });
 
-      const uploadedfile = await cloudinary.uploader.upload(req.file.path);
+   // Use the original filename as the custom name
+   const originalName = req.file.originalname;
+      
+      const uploadedfile = await cloudinary.uploader.upload(req.file.path, {
+        public_id: originalName,
+      });
+
       fileDetails = {
         public_id: uploadedfile.public_id,
         url: uploadedfile.secure_url,
+        name: originalName,
       };
     }
 

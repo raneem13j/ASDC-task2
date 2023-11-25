@@ -2,8 +2,7 @@
     display: flex;
     align-items: center;
     font-weight: 500;
-    cursor: pointer;
-    margin-top: 10px;
+    margin-top: 20px;
   }
   
   .chatOnlineImgContainer {
@@ -25,8 +24,8 @@
     border-radius: 50%;
     background-color: limegreen;
     position: absolute;
-    top: 2px;
-    right: 2px;
+    right: -2px;
+    top:-4px
   }
   
   @media screen and (max-width: 768px) {

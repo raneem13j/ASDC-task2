@@ -5,6 +5,7 @@ import ChatOnline from "../../components/chatOnline/ChatOnline";
 import Conversation from "../../components/conversations/Conversation";
 import Message from "../../components/message/Message";
 import "./messenger.css";
+import { io } from "socket.io-client";
 
 function Messenger() {
   const userId = sessionStorage.getItem("Id");
@@ -16,13 +17,40 @@ function Messenger() {
   const scrollRef = useRef();
   const [addMode, setAddMode] = useState(false);
   const [newRoom, setNewRoom] = useState("");
+  const [onlineUsers, setOnlineUsers] = useState([]);
+  const socket = useRef();
+
+  const handleLogout = () => {
+    console.log("Logout");
+    sessionStorage.clear("token");
+    window.location.href = "/";
+  };
+
+  useEffect(() => {
+    socket.current = io("ws://localhost:8900");
+
+    // Join the room when component mounts
+    if (currentChat) {
+      socket.current.emit("joinRoom", currentChat._id);
+    }
+
+    // Listen for new messages
+    socket.current.on("message", (newMessage) => {
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+    });
+  }, [currentChat]);
+
+  useEffect(() => {
+    socket.current.emit("addUser", userId);
+    socket.current.on("getUsers", (users) => {
+      setOnlineUsers(users);
+    });
+  }, [userId]);
 
   useEffect(() => {
     const getConversations = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/room/`
-        );
+        const res = await axios.get(`http://localhost:5000/room/`);
         setRooms(res.data);
       } catch (err) {
         console.log(err);
@@ -38,7 +66,6 @@ function Messenger() {
           `http://localhost:5000/message/${currentChat?._id}`
         );
         setMessages(res.data);
-      
       } catch (err) {
         console.log(err);
       }
@@ -50,7 +77,6 @@ function Messenger() {
     // Update the selected file when the file input changes
     setSelectedFile(e.target.files[0]);
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,7 +96,11 @@ function Messenger() {
 
       setMessages([...messages, res.data]);
 
-      console.log(messages)
+      // Emit the new message to the server
+      socket.current.emit("sendMessage", {
+        roomId: currentChat._id,
+        message: res.data,
+      });
       setNewMessage("");
       // Clear the selected file after submission
       setSelectedFile(null);
@@ -85,14 +115,14 @@ function Messenger() {
 
   const handleAdd = async (e) => {
     e.preventDefault();
-  
     const data = {
       roomName: newRoom,
     };
-  
     try {
-      const res = await axios.post(`http://localhost:5000/room/${userId}`, data);
-  
+      const res = await axios.post(
+        `http://localhost:5000/room/${userId}`,
+        data
+      );
       setRooms([...rooms, res.data]);
       setNewRoom("");
       setAddMode(false);
@@ -110,23 +140,29 @@ function Messenger() {
       <div className="messenger">
         <div className="chatMenu">
           <div className="chatMenuWrapper">
-            <button className="chatSubmitButton1" onClick={handleOpenForm}>Add Room</button>
+           <h2>Available Rooms</h2>
+            <button className="chatSubmitButton1" onClick={handleOpenForm}>
+              Add Room
+            </button>
             {addMode && (
-                <form >
-                  <input
-                    className="chatMessageInput1"
-                    type="text"
-                    placeholder="Class Name"
-                    name="levelName"
-                    onChange={(e) => setNewRoom(e.target.value)}
-                    value={newRoom}
-                  ></input>
-                  <button type="submit"className="chatSubmitButton2" onClick={handleAdd}>
-                    SAVE
-                  </button>
-                
-                </form>
-              )}
+              <form>
+                <input
+                  className="chatMessageInput1"
+                  type="text"
+                  placeholder="Class Name"
+                  name="levelName"
+                  onChange={(e) => setNewRoom(e.target.value)}
+                  value={newRoom}
+                ></input>
+                <button
+                  type="submit"
+                  className="chatSubmitButton2"
+                  onClick={handleAdd}
+                >
+                  SAVE
+                </button>
+              </form>
+            )}
             {rooms.map((r) => (
               <div onClick={() => setCurrentChat(r)}>
                 <Conversation room={r} />
@@ -140,7 +176,7 @@ function Messenger() {
               <>
                 <div className="chatBoxTop">
                   {messages.map((m) => (
-                    <div ref={scrollRef} >
+                    <div ref={scrollRef}>
                       <Message message={m} own={m.senderId === userId} />
                     </div>
                   ))}
@@ -162,7 +198,6 @@ function Messenger() {
                     name="file"
                     onChange={handleFileChange}
                   />
-
                 </div>
               </>
             ) : (
@@ -174,10 +209,11 @@ function Messenger() {
         </div>
         <div className="chatOnline">
           <div className="chatOnlineWrapper">
-            <ChatOnline />
-            <ChatOnline />
-            <ChatOnline />
-            <ChatOnline />
+            <h2>Online Users</h2>
+            <ChatOnline    onlineUsers={onlineUsers}  currentId={userId}/>
+            <button className="chatSubmitButton4" onClick={handleLogout}>
+              Logout
+            </button>
           </div>
         </div>
       </div>
