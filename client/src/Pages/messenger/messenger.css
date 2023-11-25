@@ -33,11 +33,22 @@
   }
   
   .chatBoxBottom {
+    
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+  }
+
+
+
+  /* .chatBoxBottom {
     margin-top: 5px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
+  } */
+
+
+
 
  .chatSubmitButton1{
     width: 80px;
@@ -56,13 +67,24 @@
   }
   
   .chatSubmitButton {
-    width: 70px;
+    width: 80px;
     height: 40px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     background-color: teal;
     color: white;
+    
+  }
+  .chatSubmitButton2 {
+    width: 40px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: teal;
+    color: white;
+    
   }
   
   .chatOnline {
@@ -78,9 +100,9 @@
   
   .noConversationText {
     position: absolute;
-    top: 10%;
-    font-size: 50px;
-    color: rgb(224, 220, 220);
+    top: 5%;
+    font-size: 40px;
+    color: rgb(176, 165, 165);
     cursor: default;
   }
   

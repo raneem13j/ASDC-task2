@@ -6,23 +6,7 @@ import Messenger from "./Pages/messenger/Messenger";
 
 function App() {
   const userId = sessionStorage.getItem("Id");
-  const [user, setUser] = useState("");
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/user/${userId}`
-        );
-        setUser(response.data);
-         console.log("user", response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchData();
-  }, []);
-
+  
 
   return (
     <>
@@ -33,7 +17,7 @@ function App() {
             <Route path="/" element={<Login />}  />
             <Route
               path="/messenger"
-              element={userId ? <Messenger user={user} /> : <Navigate to="/" />}
+              element={userId ? <Messenger /> : <Navigate to="/" />}
             />
             </Routes>
           </div>

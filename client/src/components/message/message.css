@@ -4,9 +4,9 @@
     margin-top: 20px;
   }
   
-  .messageTop{
+  /* .messageTop{
       display: flex;
-  }
+  } */
   
   .messageImg {
     width: 32px;
@@ -36,4 +36,11 @@
   .message.own .messageText{
       background-color: rgb(245, 241, 241);
       color: black;
+  }
+  .chatImg{
+    width: 120px;
+    height: 120px;
+  }
+  .messageTextFile{
+   
   }
