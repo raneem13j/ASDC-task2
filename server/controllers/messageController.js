@@ -62,6 +62,39 @@ export const getMessageByRoomId = async (req, res) => {
   }
 };
 
+export const getMessageByRoomIdPagination = async (req, res) => {
+  const roomID = req.params.roomId;
+  const page = req.query.page * 1 || 1;
+  const pageSize = req.query.pageSize * 1 || 10; // Adjust the default page size as needed
+
+  try {
+    // Count the total number of messages for the given chat room
+    const count = await Message.countDocuments({ roomId: roomID });
+
+    // Calculate the total number of pages
+    const totalPages = Math.ceil(count / pageSize);
+
+    // Calculate the number of messages to skip based on the current page
+    const skip = (page - 1) * pageSize;
+
+    // Fetch messages with pagination
+    const messages = await Message.find({ roomId: roomID })
+      .sort({ timestamp: -1 }) // Sort messages by timestamp in descending order
+      .skip(skip)
+      .limit(pageSize);
+
+    res.status(200).json({
+      results: messages.length,
+      page,
+      totalPages,
+      data: messages,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 export const fileDownload = async (req, res) => {
 
   const filename = req.params.filename;

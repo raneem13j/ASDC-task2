@@ -163,8 +163,8 @@ function Messenger() {
                 </button>
               </form>
             )}
-            {rooms.map((r) => (
-              <div onClick={() => setCurrentChat(r)}>
+            {rooms.map((r, index) => (
+              <div key={index} onClick={() => setCurrentChat(r)}>
                 <Conversation room={r} />
               </div>
             ))}
@@ -175,8 +175,8 @@ function Messenger() {
             {currentChat ? (
               <>
                 <div className="chatBoxTop">
-                  {messages.map((m) => (
-                    <div ref={scrollRef}>
+                  {messages.map((m , index) => (
+                    <div key={index} ref={scrollRef}>
                       <Message message={m} own={m.senderId === userId} />
                     </div>
                   ))}

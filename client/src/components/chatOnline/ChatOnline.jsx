@@ -33,8 +33,8 @@ useEffect(() => {
 
   return (
     <div className="chatOnline">
-      {onlineFriends?.map((o)=>(
-        <div className="chatOnlineFriend" >
+      {onlineFriends?.map((o, index)=>(
+        <div className="chatOnlineFriend" key={index}>
           <div className="chatOnlineImgContainer">
             <div className="chatOnlineBadge"></div>
           </div>
