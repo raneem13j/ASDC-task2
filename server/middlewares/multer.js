@@ -1,13 +1,17 @@
+// Importing multer for file uploading.
 import multer from "multer";
 import fs from "fs";
 import path from "path";
 
+// Setting up the directory for file uploads.
 const dir = "uploads";
 
+// Creating the directory if not found.
 if (!fs.existsSync(dir)) {
-  // CREATE DIRECTORY IF NOT FOUND
   fs.mkdirSync(dir, { recursive: true });
 }
+
+// Configuring multer disk storage for file handling.
 const fileStorageEngine = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, dir);
@@ -17,10 +21,12 @@ const fileStorageEngine = multer.diskStorage({
   },
 });
 
+// Configuring file filter based on allowed file types.
 const fileFilter = (req, file, cb) => {
   const allowedFileTypes = [".png", ".pdf", ".jpg"];
   const fileExt = path.extname(file.originalname).toLowerCase();
-  console.log(fileExt);
+  
+  // Checking if the file extension is allowed.
   if (allowedFileTypes.includes(fileExt)) {
     cb(null, true);
   } else {
@@ -31,8 +37,11 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
+// Configuring multer with the defined storage and file filter.
 const upload = multer({
   storage: fileStorageEngine,
   fileFilter: fileFilter,
 });
+
+// Exporting the configured multer instance.
 export default upload;

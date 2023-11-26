@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import "./login.css";
 import { jwtDecode } from "jwt-decode";
 
-
 function Login() {
+  // State variables for login form
   const [isLoginFormShown, setIsLoginFormShown] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState(null);
 
+  // Switch between login and signup forms
   const handleSignupClick = () => {
     setIsLoginFormShown(false);
   };
@@ -18,80 +19,82 @@ function Login() {
     setIsLoginFormShown(true);
   };
 
-
-
-  //register function
-
+  // Register function
   const handleRegister = async (event) => {
     event.preventDefault();
     setError(null);
 
     try {
+      // Send registration request to the server
       const response = await fetch("http://localhost:5000/user/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password, email }),
       });
 
+      // Handle errors in the response
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.error);
       }
 
+      // Extract token and user ID from the response
       const data = await response.json();
       sessionStorage.setItem("token", data.token);
       sessionStorage.setItem("Id", data.user);
-     
 
       // Decode the JWT token
       const decodedToken = jwtDecode(data.token);
-      // console.log(decodedToken);
 
+      // Display success message and redirect to messenger page
       alert("You have registered successfully");
-
-
       window.location.href = "/messenger";
-     
+
       console.log("Registration successful");
     } catch (error) {
+      // Handle registration errors
       setError(error.message);
       console.error(error);
-       // Show error alert
-       alert("Registration failed");
+      // Show error alert
+      alert("Registration failed");
     }
   };
 
-  //   login function
-
+  // Login function
   const handleLogin = async (event) => {
     event.preventDefault();
     setError(null);
     try {
+      // Send login request to the server
       const response = await fetch("http://localhost:5000/user/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
+
+      // Handle errors in the response
       const data = await response.json();
-      // console.log(data);
       if (!response.ok) {
         throw new Error(data.message);
       }
+
+      // Extract token and user ID from the response
       sessionStorage.setItem("token", data.token);
       sessionStorage.setItem("Id", data.user);
-      
-      
-       // Decode the JWT token
-       const decodedToken = jwtDecode(data.token);
-      // console.log(decodedToken);
-      alert("You have loged in successfully");
+
+      // Decode the JWT token
+      const decodedToken = jwtDecode(data.token);
+
+      // Display success message and redirect to messenger page
+      alert("You have logged in successfully");
       window.location.href = "/messenger";
-      // alert("You have loged in successfully");
+
       console.log("Login successful");
     } catch (error) {
+      // Handle login errors
       setError(error.message);
       console.error(error);
-       // Show error alert
+      // Show error alert
       alert("Log in failed");
     }
   };
@@ -125,6 +128,7 @@ function Login() {
               isLoginFormShown ? "" : "login-form-section-move"
             }`}
           >
+            {/* Login Form */}
             <form onSubmit={handleLogin} className="login-login-box">
               <input
                 autoComplete="off"
@@ -144,12 +148,13 @@ function Login() {
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
               />
-               {error && (
-                      <p className="error-message"> Invalid Credentials</p>
-                    )}
+              {error && (
+                <p className="error-message">Invalid Credentials</p>
+              )}
               <button className="login-clkbtn">Login</button>
             </form>
 
+            {/* Signup Form */}
             <form onSubmit={handleRegister} className="login-signup-box">
               <input
                 autoComplete="off"

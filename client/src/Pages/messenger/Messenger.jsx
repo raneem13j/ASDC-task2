@@ -8,6 +8,7 @@ import "./messenger.css";
 import { io } from "socket.io-client";
 
 function Messenger() {
+  // Retrieve user ID from session storage
   const userId = sessionStorage.getItem("Id");
   const [rooms, setRooms] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
@@ -19,13 +20,16 @@ function Messenger() {
   const [newRoom, setNewRoom] = useState("");
   const [onlineUsers, setOnlineUsers] = useState([]);
   const socket = useRef();
+  const [sendNotification, setSendNotification] = useState([]);
 
+  // Logout functionality
   const handleLogout = () => {
     console.log("Logout");
     sessionStorage.clear("token");
     window.location.href = "/";
   };
 
+  // Initialize socket connection and set up event listeners
   useEffect(() => {
     socket.current = io("ws://localhost:8900");
 
@@ -38,8 +42,16 @@ function Messenger() {
     socket.current.on("message", (newMessage) => {
       setMessages((prevMessages) => [...prevMessages, newMessage]);
     });
+
+    // Listen for notifications
+    socket.current.on("notification", (notification) => {
+      // Handle the notification as needed
+      setSendNotification(notification);
+      console.log("Notification received:", notification);
+    });
   }, [currentChat]);
 
+  // Add user to socket on component mount
   useEffect(() => {
     socket.current.emit("addUser", userId);
     socket.current.on("getUsers", (users) => {
@@ -47,6 +59,7 @@ function Messenger() {
     });
   }, [userId]);
 
+  // Fetch conversations/rooms from the server
   useEffect(() => {
     const getConversations = async () => {
       try {
@@ -59,6 +72,7 @@ function Messenger() {
     getConversations();
   }, [userId]);
 
+  // Fetch messages for the current chat from the server
   useEffect(() => {
     const getMessages = async () => {
       try {
@@ -73,11 +87,13 @@ function Messenger() {
     getMessages();
   }, [currentChat]);
 
+  // Handle file change in the input
   const handleFileChange = (e) => {
     // Update the selected file when the file input changes
     setSelectedFile(e.target.files[0]);
   };
 
+  // Handle message submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -109,10 +125,12 @@ function Messenger() {
     }
   };
 
+  // Open the form to add a new room
   const handleOpenForm = () => {
     setAddMode(true);
   };
 
+  // Handle adding a new room
   const handleAdd = async (e) => {
     e.preventDefault();
     const data = {
@@ -131,16 +149,18 @@ function Messenger() {
     }
   };
 
+  // Scroll to the latest message when messages change
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+ 
   return (
     <>
       <div className="messenger">
         <div className="chatMenu">
           <div className="chatMenuWrapper">
-           <h2>Available Rooms</h2>
+            <h2>Available Rooms</h2>
             <button className="chatSubmitButton1" onClick={handleOpenForm}>
               Add Room
             </button>
@@ -209,11 +229,19 @@ function Messenger() {
         </div>
         <div className="chatOnline">
           <div className="chatOnlineWrapper">
-            <h2>Online Users</h2>
-            <ChatOnline    onlineUsers={onlineUsers}  currentId={userId}/>
+            
+            <div>
+            <h2>Notification</h2>
+            {sendNotification.senderId !== userId && (
+            <p>{sendNotification.message}</p>
+            )}
+            </div>
+           
             <button className="chatSubmitButton4" onClick={handleLogout}>
               Logout
             </button>
+            <h2>Online Users</h2>
+            <ChatOnline onlineUsers={onlineUsers} currentId={userId} />
           </div>
         </div>
       </div>

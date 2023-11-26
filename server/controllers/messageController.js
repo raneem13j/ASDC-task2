@@ -1,3 +1,4 @@
+// Importing necessary modules and models.
 import Message from "../models/messageModel.js";
 import upload from "../middlewares/multer.js";
 import { v2 as cloudinary } from "cloudinary";
@@ -8,28 +9,32 @@ import path from "path";
 import fs from "fs";
 dotenv.config();
 
-
+// Getting the current filename and dirname.
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Controller function to send a message.
 export const sendMessage = async (req, res) => {
   try {
-    let fileDetails = {}; 
+    let fileDetails = {};
 
     if (req.file) {
+      // Configuring cloudinary for file uploads.
       cloudinary.config({
         cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
         api_key: process.env.CLOUDINARY_API_KEY,
         api_secret: process.env.CLOUDINARY_API_SECRET,
       });
 
-   // Use the original filename as the custom name
-   const originalName = req.file.originalname;
-      
+      // Use the original filename as the custom name
+      const originalName = req.file.originalname;
+
+      // Uploading the file to cloudinary.
       const uploadedfile = await cloudinary.uploader.upload(req.file.path, {
         public_id: originalName,
       });
 
+      // Storing file details.
       fileDetails = {
         public_id: uploadedfile.public_id,
         url: uploadedfile.secure_url,
@@ -37,6 +42,7 @@ export const sendMessage = async (req, res) => {
       };
     }
 
+    // Creating a new message with the provided details.
     const newMessage = new Message({
       roomId: req.body.roomId,
       senderId: req.body.senderId,
@@ -44,6 +50,7 @@ export const sendMessage = async (req, res) => {
       file: fileDetails,
     });
 
+    // Saving the message to the database.
     const savedMessage = await newMessage.save();
     res.status(200).json(savedMessage);
   } catch (err) {
@@ -51,6 +58,7 @@ export const sendMessage = async (req, res) => {
   }
 };
 
+// Controller function to get messages by room ID.
 export const getMessageByRoomId = async (req, res) => {
   try {
     const messages = await Message.find({
@@ -62,10 +70,11 @@ export const getMessageByRoomId = async (req, res) => {
   }
 };
 
+// Controller function to get messages by room ID with pagination.
 export const getMessageByRoomIdPagination = async (req, res) => {
   const roomID = req.params.roomId;
   const page = req.query.page * 1 || 1;
-  const pageSize = req.query.pageSize * 1 || 10; // Adjust the default page size as needed
+  const pageSize = req.query.pageSize * 1 || 10;
 
   try {
     // Count the total number of messages for the given chat room
@@ -79,10 +88,11 @@ export const getMessageByRoomIdPagination = async (req, res) => {
 
     // Fetch messages with pagination
     const messages = await Message.find({ roomId: roomID })
-      .sort({ timestamp: -1 }) // Sort messages by timestamp in descending order
+      .sort({ timestamp: -1 })
       .skip(skip)
       .limit(pageSize);
 
+    // Return the paginated messages along with metadata.
     res.status(200).json({
       results: messages.length,
       page,
@@ -95,10 +105,10 @@ export const getMessageByRoomIdPagination = async (req, res) => {
   }
 };
 
+// Controller function for file download.
 export const fileDownload = async (req, res) => {
-
   const filename = req.params.filename;
-  const filePath = path.join(__dirname, "..", "uploads", filename); 
+  const filePath = path.join(__dirname, "..", "uploads", filename);
 
   try {
     // Check if the file exists
