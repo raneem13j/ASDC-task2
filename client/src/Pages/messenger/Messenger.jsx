@@ -21,7 +21,13 @@ function Messenger() {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const socket = useRef();
   const [sendNotification, setSendNotification] = useState([]);
-
+  const jwt = sessionStorage.getItem("token");
+ 
+  const config = {
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+    },
+  };
   // Logout functionality
   const handleLogout = () => {
     console.log("Logout");
@@ -57,7 +63,7 @@ function Messenger() {
     socket.current.on("getUsers", (users) => {
       setOnlineUsers(users);
     });
-  }, [userId]);
+  }, [userId, currentChat]);
 
   // Fetch conversations/rooms from the server
   useEffect(() => {
@@ -85,7 +91,7 @@ function Messenger() {
       }
     };
     getMessages();
-  }, [currentChat]);
+  }, [currentChat, messages]);
 
   // Handle file change in the input
   const handleFileChange = (e) => {
@@ -107,6 +113,7 @@ function Messenger() {
       const res = await axios.post("http://localhost:5000/message", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          "Authorization": `Bearer ${jwt}`,
         },
       });
 
@@ -139,7 +146,7 @@ function Messenger() {
     try {
       const res = await axios.post(
         `http://localhost:5000/room/${userId}`,
-        data
+        data, config
       );
       setRooms([...rooms, res.data]);
       setNewRoom("");

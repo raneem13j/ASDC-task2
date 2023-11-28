@@ -1,6 +1,7 @@
 // Importing express and creating a router instance.
 import express from "express";
 const router = express.Router();
+import {userAuth} from "../middlewares/auth.js"
 
 // Importing multer middleware for file uploads.
 import upload from '../middlewares/multer.js';
@@ -17,7 +18,7 @@ import {
 router.get('/:roomId', getMessageByRoomId);
 router.get('/pag/:roomId', getMessageByRoomIdPagination);
 router.get('/download/:filename', fileDownload);
-router.post('/', upload.single("file"), sendMessage);
+router.post('/', upload.single("file"),userAuth, sendMessage);
 
 // Exporting the router.
 export default router;

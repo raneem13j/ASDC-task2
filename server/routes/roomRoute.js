@@ -1,6 +1,7 @@
 // Importing express and creating a router instance.
 import express from "express";
 const router = express.Router();
+import {userAuth} from "../middlewares/auth.js"
 
 // Importing room controller functions.
 import {
@@ -17,8 +18,8 @@ router.get('/', getAllRooms);
 router.get('/:id', getRoomById);
 router.get('/roomUsers/:id', getUsersInRoom);
 router.get('/userRooms/:userId', getRoomsByUserId);
-router.put('/:id', joinRoom);
-router.post('/:id', createRoom);
+router.put('/:id',userAuth, joinRoom);
+router.post('/:id',userAuth, createRoom);
 
 // Exporting the router.
 export default router;
