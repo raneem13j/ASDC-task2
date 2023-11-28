@@ -241,7 +241,16 @@ function Messenger() {
               Logout
             </button>
             <h2>Online Users</h2>
-            <ChatOnline onlineUsers={onlineUsers} currentId={userId} />
+            {currentChat ? (
+              <>
+            
+            <ChatOnline onlineUsers={onlineUsers} currentChat={currentChat} />
+            </>
+            ) : (
+              <span className="noConversationText1">
+                Open a conversation to see online users
+              </span>
+            )}
           </div>
         </div>
       </div>

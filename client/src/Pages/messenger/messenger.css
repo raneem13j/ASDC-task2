@@ -58,10 +58,11 @@
     cursor: pointer;
     background-color: teal;
     color: white;
-    
+    margin-top: 10px;
   }
 
  .chatSubmitButton1{
+  margin-top: 10px;
   width: 80px;
   height: 40px;
   border: none;
@@ -113,8 +114,20 @@
     cursor: default;
    
   }
+
+  .noConversationText1 {
+    
+    top: 5%;
+    font-size: 20px;
+    color: teal;
+    cursor: default;
+   
+  }
+
   h2{
-    color:teal
+    color:teal;
+    margin-top: 20px;
+    
   }
   
   @media screen and (max-width: 768px) {
