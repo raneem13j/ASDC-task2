@@ -16,10 +16,15 @@ function Conversation(room) {
   // State to track the join status.
   const [join, setJoin] = useState("");
 
-  /**
-   * Handles the form submission to join the room.
-   * @param {Event} e - The form submission event.
-   */
+  const jwt = sessionStorage.getItem("token");
+ 
+  const config = {
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+    },
+  };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
@@ -27,7 +32,7 @@ function Conversation(room) {
     };
     try {
       // Make a PUT request to join the room.
-      const res = await axios.put(`http://localhost:5000/room/${room.room._id}`, data);
+      const res = await axios.put(`http://localhost:5000/room/${room.room._id}`, data, config );
       setJoin(res.data);
       // Reload the page to reflect the updated room status.
       window.location.reload(true);
